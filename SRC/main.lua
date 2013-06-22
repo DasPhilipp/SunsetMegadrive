@@ -1,14 +1,18 @@
 require "player"
+require "menu"
 
 function love.load()
 	devmode = true
-	console = "Console: "
+	devcon = false
 	love.graphics.setBackgroundColor(255,255,255)
+
+	console = "Console: "
 
 	gamestate = "menu"
 
 	pic = {
-			logo = love.graphics.newImage("/img/logo.png")
+			logo = love.graphics.newImage("/img/logo.png"),
+			console = love.graphics.newImage("/img/console.png")
 		}
 
 	if gamestate == "playing" then
@@ -21,15 +25,28 @@ function love.update(dt)
 	
 end
 
+
 function love.keypressed(key, unicode)
 
 	if key == "escape" then
 		love.event.push("quit")
 	end
 
-	if key == "return" then
-		gamestate = "playing"
+	if key == "return" and
+		gamestate == "menu" then
+			gamestate = "playing"
 	end
+
+	-- Dev-Console
+	if devmode == true and
+		gamestate == "playing" and
+			key == "c" and
+				devcon == false then
+					devcon = true
+	elseif devcon == true then
+			devcon = false
+	end
+
 
 	if devmode == true then
 		if unicode > 31 and unicode < 127 then
@@ -47,15 +64,17 @@ function love.draw()
 	end
 
 	if gamestate == "playing" then
-		love.graphics.setBackgroundColor(0,0,0)
+		love.graphics.setBackgroundColor(0,0, 0)
 		player_draw()
-		love.graphics.setColor(255,255,255)
-		love.graphics.rectangle("fill", 0, 580, 800, 20)
 	end
 
-	if devmode == true then
-		love.graphics.setColor(255,255,255)
-		love.graphics.printf(console, 0, 0, 800)
+	if gamestate == "playing" and
+		devcon == true then
+			love.graphics.draw(pic.console, 0, 0)
+	end
+	if gamestate == "playing" and
+			devcon == false then
+				love.graphics.clear()
 	end
 	
 end
