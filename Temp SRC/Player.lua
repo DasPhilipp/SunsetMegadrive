@@ -32,13 +32,28 @@ function Player:jump()
 end
 
 function Player:moveRight()
-    self.xSpeed = self.runSpeed
+    if self.state == "stand" then
+        self.xSpeed = self.runSpeed
+    elseif self.state == "jump" then
+        self.xSpeed = -1 * (self.jumpSpeed)
+    end
 end
 
 function Player:moveLeft()
-    self.xSpeed = -1 * (self.runSpeed)
+    if self.state == "stand" then
+        self.xSpeed = -1 * (self.runSpeed)
+    elseif self.state == "jump" then
+        self.xSpeed = (self.jumpSpeed)
+    end
 end
 
+-- fuer wall jump
+--[[
+    self.xSpeed = -1 * (self.runSpeed)
+    if self.state == "jump" then
+        self.xSpeed = -1 * (self.jumpSpeed)
+    end
+]]
 function Player:stop()
     self.xSpeed = 0
 end
@@ -74,4 +89,5 @@ function Player:update(dt, gravity)
             self.state = "stand"
         end
     end    
+
 end

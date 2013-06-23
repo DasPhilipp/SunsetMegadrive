@@ -19,7 +19,7 @@ function love.load()
 	yFloor = 300
 end
 
-function love.update()
+function love.update(dt)
 
 	if love.keyboard.isDown("d") then
 		p:moveRight()
@@ -28,7 +28,7 @@ function love.update()
 		p:moveLeft()
 	end
 
-	if love.keyboard.isDown("space") then
+	if love.keyboard.isDown(" ") then
 		p:jump()
 	end
 
