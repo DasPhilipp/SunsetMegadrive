@@ -10,19 +10,49 @@ function love.load()
 
 	gamestate = "menu"
 
-	pic = {
+	img = {
 			logo = love.graphics.newImage("/img/logo.png"),
 			console = love.graphics.newImage("/img/console.png")
-		}
+	}
 
-	if gamestate == "playing" then
-		player_load()
-	end	
+	-- initiate player values unso
+	
+	p = player:new()
+
+	p.x = 300
+	p.y = 300
+	p.width = 20
+	p.height = 20
+	p.jumpSpeed = -800
+	p.runSpeed = 500
+	p.pic = love.graphics.newImage("/img/playa.png")
+
+	gravity = 1800
+
+	yFloor = 500
 end
 
 
 function love.update(dt)
-	
+	if gamestate == "playing" then
+		if love.keyboard.isDown("d") then
+			p:moveRight()
+		end
+		if love.keyboard.isDown("a") then 
+			p:moveLeft()
+		end
+		if love.keyboard.isDown("space") then
+			p:jump()
+		end
+		p:update(dt, gravity)
+
+		if p.x > 800 - p.width then p.x = 800 - p.width end
+		if p.x < 0 then p.x = 0 end
+		if p.y < 0 then p.y = 0 end
+		if p.y > yFloor - p.height then
+			p:hitFloor(yFloor)
+		end
+	end
 end
 
 
@@ -60,21 +90,34 @@ end
 function love.draw()
 
 	if gamestate == "menu" then 
-		love.graphics.draw(pic.logo, 60, 125)
+		love.graphics.draw(img.logo, 60, 125)
 	end
 
+	-- ingame
 	if gamestate == "playing" then
-		love.graphics.setBackgroundColor(0,0, 0)
+		local x = math.floor(p.x)
+		local y = math.floor(p.y)
+		love.graphics.setBackgroundColor(0,0,0)
 		player_draw()
+
+		love.graphics.setColor(25,200,25)
+		love.graphics.rectangle("fill", 0, yFloor, 800, 100)
+
+		love.graphics.setColor(255,255,255)
+
 	end
 
 	if gamestate == "playing" and
 		devcon == true then
-			love.graphics.draw(pic.console, 0, 0)
+			love.graphics.draw(img.console, 0, 0)
 	end
-	if gamestate == "playing" and
-			devcon == false then
-				love.graphics.clear()
+end
+
+
+function love.keyreleased(key)
+	if gamestate == "playing" then
+		if (key == "d") or (key == "a") then
+			p:stop()
+		end
 	end
-	
 end
