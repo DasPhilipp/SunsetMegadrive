@@ -12,7 +12,12 @@ function love.load()
 	p.width = 25
 	p.height = 40
 	p.jumpSpeed = -800
-	p.runSpeed = 500
+	p.airSpeed = -400
+	p.runSpeed = 0
+	p.fallSpeed = -300
+	p.maxSpeed = 500
+
+	p.acc = 100
 
 	gravity = 1800
 

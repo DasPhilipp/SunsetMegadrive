@@ -17,6 +17,10 @@ function Player:new()
     state = "",
     jumpSpeed = 0,
     runSpeed = 0,
+    fallSpeed = 0,
+    airSpeed = 0,
+    acc = 0,
+    maxSpeed = 0,
     canJump = false
     }
     setmetatable(object, { __index = Player })
@@ -32,18 +36,24 @@ function Player:jump()
 end
 
 function Player:moveRight()
-    if self.state == "stand" then
-        self.xSpeed = self.runSpeed
+    if self.state == "stand" and
+        self.xSpeed < self.maxSpeed then
+                self.xSpeed = self.runSpeed + self.acc
     elseif self.state == "jump" then
-        self.xSpeed = -1 * (self.jumpSpeed)
+        self.xSpeed = -1 * (self.airSpeed)
+    elseif self.state == "fall" then
+        self.xSpeed = -1 * (self.fallSpeed)
     end
 end
 
 function Player:moveLeft()
-    if self.state == "stand" then
-        self.xSpeed = -1 * (self.runSpeed)
+    if self.state == "stand" and
+        self.xSpeed < self.maxSpeed then
+                self.xSpeed = -1 * (self.xSpeed) - self.acc
     elseif self.state == "jump" then
-        self.xSpeed = (self.jumpSpeed)
+        self.xSpeed = (self.airSpeed)
+    elseif self.state == "fall" then
+        self.xSpeed = self.fallSpeed
     end
 end
 
