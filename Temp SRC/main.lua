@@ -1,3 +1,6 @@
+require "player/Player"
+require "player/SpriteAnimation"
+--require "camera"
 
 function love.load()
 	playerColor = {255, 0, 128}
@@ -17,7 +20,7 @@ function love.load()
 	p.fallSpeed = -300
 	p.maxSpeed = 500
 
-	p.acc = 100
+	p.acc = 300
 
 	gravity = 1800
 
@@ -74,5 +77,14 @@ function love.keyreleased(key)
 	end
 	if (key == "a") or (key == "d") then
 		p:stop()
+	end
+end
+
+
+function love.keypressed(key)
+	if key == "a" then
+		if p.xSpeed < p.maxSpeed then
+			p.xSpeed = p.xSpeed - p.acc
+		end
 	end
 end
