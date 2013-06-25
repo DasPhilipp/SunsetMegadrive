@@ -1,4 +1,4 @@
-require "player/Player"
+require "player/player"
 require "player/SpriteAnimation"
 --require "camera"
 
@@ -25,6 +25,10 @@ function love.load()
 	gravity = 1800
 
 	yFloor = 300
+
+	-- Player Animation
+
+	animation = SpriteAnimation:new("player/player.png", 64, 64, 1, 9)
 end
 
 function love.update(dt)
