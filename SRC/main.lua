@@ -7,13 +7,12 @@ function love.load()
 	groundColor = {25, 200, 25}
 
 	-- initiate Playa stuffz
-	require "Player"
 	p = Player:new()
 
 	p.x = 300
 	p.y = 300
-	p.width = 25
-	p.height = 40
+	p.width = 40
+	p.height = 64
 	p.jumpSpeed = -800
 	p.airSpeed = -400
 	p.runSpeed = 0
@@ -24,20 +23,25 @@ function love.load()
 
 	gravity = 1800
 
-	yFloor = 300
+	yFloor = 400
 
 	-- Player Animation
 
-	animation = SpriteAnimation:new("player/player.png", 64, 64, 1, 9)
+	delay = 120
+
+	animation = SpriteAnimation:new("player/test.png", 64, 64, 9, 2)
+	animation:load(delay)
 end
 
 function love.update(dt)
 
 	if love.keyboard.isDown("d") then
 		p:moveRight()
+		animation:flip(false,false)
 	end
 	if love.keyboard.isDown("a") then
 		p:moveLeft()
+		animation:flip(true, false)
 	end
 
 	if love.keyboard.isDown(" ") then
@@ -53,19 +57,28 @@ function love.update(dt)
 	if p.y > yFloor - p.height then
 		p:hitFloor(yFloor)
 	end
+
+
+	if (p.state == "stand") then
+        animation:switch(1, 1, 200)
+    end
+    if (p.state == "moveRight") or (p.state == "moveLeft") then
+        animation:switch(2, 8, 120)
+    end
+
+    animation:update(dt)
 end
 
 function love.draw()
 
-	local x = math.floor(p.x)
-	local y = math.floor(p.y)
+	local x, y = math.floor(p.x), math.floor(p.y)
 
-	love.graphics.setColor(playerColor)
-	love.graphics.rectangle("fill", x, y, p.width, p.height)
+	love.graphics.setColor(255,255,255)
+	animation:draw(x, y)
 
 	-- grund drawen
 	love.graphics.setColor(groundColor)
-	love.graphics.rectangle("fill", 0, yFloor, 800, 100)
+	love.graphics.rectangle("fill", 0, yFloor, 800, 50)
 
 	-- debug
 	love.graphics.setColor(255,255,255)
